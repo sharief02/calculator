@@ -114,7 +114,7 @@
 
         .table-header {
             display: grid;
-            grid-template-columns: 80px 1fr 150px;
+            grid-template-columns: 80px 1fr 150px 40px;
             gap: 1rem;
             color: rgba(255,255,255,0.8);
             padding: 0.5rem 1rem;
@@ -123,7 +123,7 @@
 
         .weight-row {
             display: grid;
-            grid-template-columns: 80px 1fr 150px;
+            grid-template-columns: 80px 1fr 150px 40px;
             gap: 1rem;
             padding: 0.5rem 1rem;
             background: rgba(255,255,255,0.05);
@@ -149,10 +149,22 @@
             gap: 0.5rem;
         }
 
-        button:hover {
-            background: #21867a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            color: #ff4757;
+            transform: scale(1.1);
         }
 
         .results-section {
@@ -196,10 +208,30 @@
         }
 
         .shrimp-icon {
-            width: 40px;
-            height: 40px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M23 14.54c0 1.63-1.37 2.96-3.05 2.96-1.63 0-2.95-1.32-2.95-2.96 0-1.63 1.32-2.95 2.95-2.95 1.68 0 3.05 1.32 3.05 2.95zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-18C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>');
-            background-size: contain;
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .weight-row {
+                grid-template-columns: 40px 1fr 120px 30px;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+            
+            .table-header {
+                grid-template-columns: 40px 1fr 120px 30px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -226,6 +258,7 @@
                 <span>No.</span>
                 <span>Weight (kg)</span>
                 <span>Tray Type</span>
+                <span>Action</span>
             </div>
             <div id="weights-container"></div>
             <button id="add-row">
@@ -252,9 +285,112 @@
                 <input type="text" id="number-result" disabled>
             </div>
         </div>
-        </div>
     </div>
 
-<script src="script.js"></script>
+<script>
+const DEFAULT_MAX_WEIGHTS = 40;
+
+// DOM Elements
+const countInput = document.getElementById('count');
+const warning = document.getElementById('warning');
+const weightsContainer = document.getElementById('weights-container');
+const addRowButton = document.getElementById('add-row');
+const numberResult = document.getElementById('number-result');
+const totalWeightResult = document.getElementById('total-weight');
+const netWeightResult = document.getElementById('net-weight');
+const finalWeightResult = document.getElementById('final-weight');
+
+let countModified = false;
+
+// Initialize default weights
+function initializeWeights() {
+  for (let i = 0; i < DEFAULT_MAX_WEIGHTS; i++) {
+    addWeightRow();
+  }
+}
+
+// Add a new weight row
+function addWeightRow() {
+  const row = document.createElement('div');
+  row.className = 'weight-row';
+  row.innerHTML = `
+    <span>${weightsContainer.children.length + 1}</span>
+    <input type="number" class="weight-input" value="0" min="0" step="0.1">
+    <select class="tray-type">
+      <option value="2">Double Tray</option>
+      <option value="1">Single Tray</option>
+    </select>
+    <button class="delete-btn">×</button>
+  `;
+  weightsContainer.appendChild(row);
+
+  // Add event listeners
+  row.querySelector('.weight-input').addEventListener('input', updateCalculations);
+  row.querySelector('.tray-type').addEventListener('change', updateCalculations);
+  row.querySelector('.delete-btn').addEventListener('click', () => {
+    row.remove();
+    updateRowNumbers();
+    updateCalculations();
+  });
+}
+
+// Update row numbers
+function updateRowNumbers() {
+  Array.from(weightsContainer.children).forEach((row, index) => {
+    row.querySelector('span').textContent = index + 1;
+  });
+}
+
+// Add extra row
+addRowButton.addEventListener('click', () => {
+  addWeightRow();
+  updateCalculations();
+});
+
+// Update calculations
+function updateCalculations() {
+  const count = parseInt(countInput.value);
+  const weightRows = weightsContainer.querySelectorAll('.weight-row');
+
+  let totalWeight = 0;
+  let netWeight = 0;
+
+  weightRows.forEach(row => {
+    const weightInput = row.querySelector('.weight-input');
+    const trayFactor = parseFloat(row.querySelector('.tray-type').value);
+    const weight = parseFloat(weightInput.value);
+
+    if (!isNaN(weight) && weight > 0) {
+      totalWeight += weight;
+      netWeight += weight * trayFactor * 0.1;
+      weightInput.classList.remove('invalid');
+    } else {
+      weightInput.classList.add('invalid');
+    }
+  });
+
+  const finalWeight = totalWeight - netWeight;
+  const numberValue = isNaN(count) || count <= 0 ? 0 : finalWeight * count;
+
+  // Update results
+  totalWeightResult.value = totalWeight.toFixed(2);
+  netWeightResult.value = netWeight.toFixed(2);
+  finalWeightResult.value = finalWeight.toFixed(2);
+  numberResult.value = numberValue.toFixed(2);
+
+  // Show/hide warning
+  warning.style.display = (count <= 0 && !countModified) ? 'block' : 'none';
+}
+
+// Track count input changes
+countInput.addEventListener('input', () => {
+  countModified = true;
+  updateCalculations();
+});
+
+// Initialize
+initializeWeights();
+updateCalculations();
+</script>
 </body>
 </html>
