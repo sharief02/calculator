@@ -1,154 +1,349 @@
-/* General Styles */
-body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: #fff;
+/* Base Styles & Glassmorphism Theme */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a4b8e, #1a4b8e);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  padding: 1rem;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
-
 .container {
   background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
   padding: 2rem;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 800px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
-
-header {
+.header {
   text-align: center;
   margin-bottom: 2rem;
 }
-
-header h1 {
-  font-size: 2.5rem;
-  margin: 0;
-  color: #ffd700;
+.header h1 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-
-header p {
-  font-size: 1.2rem;
-  color: #ddd;
-}
-
-/* Input Section */
-.input-section {
-  margin-bottom: 1.5rem;
-}
-
-.input-section label {
-  font-size: 1.1rem;
-  margin-right: 10px;
-}
-
-.input-section input {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-.warning {
-  color: #ff6b6b;
+.header p {
+  color: rgba(255,255,255,0.9);
+  font-weight: 300;
   font-size: 0.9rem;
-  margin-top: 0.5rem;
-  display: none;
 }
-
-/* Weights Table */
-.weights-table {
+.input-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
-
+.input-group {
+  margin-bottom: 1rem;
+}
+label {
+  display: block;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+input[type="number"],
+input[type="text"],
+select {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+input:focus,
+select:focus {
+  outline: none;
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 0 2px #2a9d8f;
+}
+.weights-table {
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+.table-header,
+.weight-row {
+  display: grid;
+  grid-template-columns: 60px minmax(120px, 1fr) 130px 50px;
+  gap: 1rem;
+  padding: 0.8rem;
+  min-width: 500px;
+}
 .table-header {
-  display: flex;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.5rem;
-  border-radius: 5px;
+  color: rgba(255,255,255,0.8);
   margin-bottom: 0.5rem;
 }
-
-.table-header span {
-  flex: 1;
-  text-align: center;
-  font-weight: bold;
-}
-
-#weights-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .weight-row {
-  display: flex;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem;
-  border-radius: 5px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
 }
-
 .weight-row input,
 .weight-row select {
-  flex: 1;
-  padding: 0.5rem;
+  background: transparent;
   border: none;
-  border-radius: 5px;
-  margin: 0 5px;
+  color: #fff;
 }
-
+.delete-btn {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Add new row Button styled to match WhatsApp share button */
 #add-row {
   width: 100%;
   padding: 0.5rem;
-  background: #ffd700;
+  background: #2a9d8f;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
   margin-top: 1rem;
+  color: #fff;
 }
-
 #add-row:hover {
-  background: #ffc107;
+  background: #238f6a;
 }
-
-/* Results Section */
-.results {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1rem;
-  border-radius: 5px;
+/* Results Section Box with thicker border */
+.results-section {
+  background: rgba(255,255,255,0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border: 2px solid rgba(255,255,255,0.4);
 }
-
-.results h2 {
-  margin-top: 0;
-  color: #ffd700;
-}
-
 .result-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.8rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
   margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
-
-.result-item label {
-  font-size: 1.1rem;
-}
-
 .result-item input {
-  padding: 0.5rem;
+  background: none;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  width: 150px;
-  text-align: right;
-  background: rgba(255, 255, 255, 0.2);
   color: #fff;
+  font-size: 1rem;
+  text-align: right;
+  width: 100%;
+  flex: 1;
+}
+.warning {
+  color: #ff6b6b;
+  background: rgba(255,107,107,0.1);
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  display: none;
+  font-size: 0.9rem;
+}
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.action-buttons button {
+  flex: 1;
+  min-width: 200px;
+  background: #2a9d8f;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+.action-buttons button:hover {
+  background: #238f6a;
+}
+/* WhatsApp Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  color: #fff;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.modal-header h2 {
+  font-size: 1.5rem;
+}
+.close-modal {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-content {
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  background: rgba(0,0,0,0.2);
+  padding: 1rem;
+  border-radius: 10px;
+}
+.modal-actions {
+  text-align: right;
+}
+.modal-actions button {
+  background: #2a9d8f;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+  .input-group-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  .table-header,
+  .weight-row {
+    grid-template-columns: 40px minmax(100px, 1fr) 100px 40px;
+    gap: 0.8rem;
+    padding: 0.6rem;
+  }
+}
+@media (max-width: 480px) {
+  body {
+    padding: 0.5rem;
+  }
+  .container {
+    padding: 1rem;
+  }
+  input[type="number"],
+  input[type="text"],
+  select {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+}
+/* Print Styles */
+/* Hide the Add new row button, action buttons, and delete buttons;
+   Force the input-group-row to display side by side;
+   Hide the Tray Type and Action columns;
+   Hide unfilled weight rows;
+   Display weight rows in a smaller font;
+   And draw the results section in a box using the same color theme */
+@media print {
+  #add-row, .action-buttons, .delete-btn {
+    display: none !important;
+  }
+  .input-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem;
+  }
+  .table-header span:nth-child(3),
+  .table-header span:nth-child(4),
+  .weight-row > :nth-child(3),
+  .weight-row > :nth-child(4) {
+    display: none !important;
+  }
+  .weight-row[data-filled="false"] {
+    display: none !important;
+  }
+  .weight-row {
+    font-size: 0.75rem !important;
+  }
+  .results-section {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    padding: 1.5rem !important;
+    margin-top: 2rem !important;
+  }
+  /* Force background printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    background: linear-gradient(135deg, #1a4b8e, #1a4b8e) !important;
+    color: #fff !important;
+  }
+  .container {
+    background: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+  }
 }
